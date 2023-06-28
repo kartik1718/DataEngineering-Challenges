@@ -1,0 +1,16 @@
+1. select na.N_NAME,sum(or.O_TOTAL_PRICE) as revenue from ETL_ORDERS or join ETL_CUSTOMER cu on or.O_CUSTKEY=cu.C_CUSTKEY join ETL_NATION na on cu.C_NATIONKEY=na.NATIONKEY group by na.N_NAME order by revenue limit 5 desc     
+
+2. with cte as 
+(select na.N_NAME as country,count(li.L_SHIPMODE) commonmode from ETL_LINEITEM li join ETL_ORDERS or on li.L_ORDERKEY=or.O_ORDERKEY join ETL_CUSTOMER cu on or.O_CUSTKEY=cu.C_CUSTKEY join ETL_NATION na on cu.C_NATIONKEY=na.N_NATIONKEY order by commonmode desc limit 1)
+
+select * from cte where cte.country in
+
+(select na.N_NAME from
+(select na.N_NAME,sum(or.O_TOTAL_PRICE) as revenue from ETL_ORDERS or join ETL_CUSTOMER cu on or.O_CUSTKEY=cu.C_CUSTKEY join ETL_NATION na on cu.C_NATIONKEY=na.NATIONKEY group by na.N_NAME order by revenue limit 5 desc))
+
+3. select month(or.orderdate) as months, sum(or.TOTAL_PRICE) as rev from ETL_ORDERS or group by months order by rev desc limit 3 
+
+4. select cu.C_NAME,sum(or.O_TOTALPRICE) as rev,count(li.L_QUANTITY) as totalquantity from ETL_LINEITEM li join ETL_ORDERS or on li.L_ORDERKEY=or.O_ORDERKEY join ETL_CUSTOMER cu on or.O_CUSTKEY=cu.C_CUSTKEY group by cu.C_NAME order by rev desc,totalquantity desc limit 1
+
+5. 
+  
